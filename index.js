@@ -22,29 +22,29 @@ app.use(express.json());
 
         //<------------ Database All Collections ------------->
         const database = client.db("carCollections");
-        const getAllCars = database.collection("allCars");
-        const getAllBlogs = database.collection("blogs");
-        const getRatings = database.collection("userRatings");
+        const carCollections = database.collection("allCars");
+        const blogCollections = database.collection("blogs");
+        const ratingCollections = database.collection("userRatings");
         const userCollections = database.collection("users");
         const OrderCollections = database.collection("allOrders");
 
         //<------------ Get All Cars From Database ------------->
 
         app.get('/allCars',async(req,res)=>{
-          const getCars=await getAllCars.find({}).toArray();
+          const getCars=await carCollections.find({}).toArray();
           res.send(getCars)
         }); 
 
         //<------------ Get Blogs Data From Database ------------->
 
         app.get('/blogs',async(req,res)=>{
-          const getBlogs=await getAllBlogs.find({}).toArray();
+          const getBlogs=await blogCollections.find({}).toArray();
           res.send(getBlogs)
         }); 
         //<------------ Get User Rating Data From Database ------------->
 
         app.get('/userRating',async(req,res)=>{
-          const getUserRatings=await getRatings.find({}).toArray();
+          const getUserRatings=await ratingCollections.find({}).toArray();
           res.send(getUserRatings)
         }); 
 
@@ -52,7 +52,7 @@ app.use(express.json());
 
         app.post('/addRating',async(req,res)=>{
           const receiveRating=req.body;
-          const result=await getRatings.insertOne(receiveRating);
+          const result=await ratingCollections.insertOne(receiveRating);
           res.json(result); 
           
         })
@@ -70,7 +70,7 @@ app.use(express.json());
         app.get('/order/:id',async(req,res)=>{
           const id=req.params.id;
           const query={_id:ObjectId(id)};
-          const showOrder=await getAllCars.findOne(query);
+          const showOrder=await carCollections.findOne(query);
           res.json(showOrder);          
         })
         
@@ -152,22 +152,24 @@ app.use(express.json());
           res.json(remove)
         });
 
- //<------------ Product Add to Database ------------>
+        //<------------Add New Product to Database ------------>
 
         app.post('/addProduct',async(req,res)=>{
           const addProduct=req.body;
-          const result=await getAllCars.insertOne(addProduct);
+          const result=await carCollections.insertOne(addProduct);
           res.json(result); 
           
         })
 
+        //<------------ Delete a Product From DB By Admin ------------>
 
-
-
-
-
-
-
+        app.delete('/deleteProduct/:id',async(req,res)=>{
+          const id=req.params.id;
+          const query={_id:ObjectId(id)}
+          const remove=await carCollections.deleteOne(query);
+          console.log(remove);
+          res.json(remove)
+        });
 
       } finally {
         // await client.close();
