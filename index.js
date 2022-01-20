@@ -5,9 +5,11 @@ require('dotenv').config();
 const app=express();
 const port=process.env.PORT || 5000;
 const cors=require('cors');
+const fileUpload=require('express-fileupload')
 
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 
 
 //<------------- Database Code Here ---------->
@@ -51,10 +53,21 @@ app.use(express.json());
           //<------------ Post User Rating By User ------------->
 
         app.post('/addRating',async(req,res)=>{
-          const receiveRating=req.body;
-          const result=await ratingCollections.insertOne(receiveRating);
+          const name=req.body.name;
+          const rating=req.body.rating;
+          const comment=req.body.comment;
+          const pic=req.files.image;
+          const picData=pic.data;
+          const encodedPic=picData.toString('base64');
+          const imageBuffer=Buffer.from(encodedPic,'base64');
+          const newRating={
+            name,
+            comment,
+            start:rating,
+            url:imageBuffer
+          }
+          const result=await ratingCollections.insertOne(newRating);
           res.json(result); 
-          
         })
 
       //<--------------- Send Orders Data to Database ----------------->
@@ -178,7 +191,7 @@ app.use(express.json());
     run().catch(console.dir);
     
     app.get('/',(req,res)=>{
-      res.send('Running AI Auto Cars Server')
+      res.send('Running Mr.Automotive Server')
     });
 
 
