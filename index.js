@@ -250,13 +250,13 @@ app.use(express.urlencoded({ extended: true }));
          //<-------- SSLCommerz Fail API------------>
 
       app.post('/fail', (req,res)=>{
-        res.status(400).redirect(`https://mr-automative-car-center.netlify.app/dashboard/fail`);
+        res.status(400).redirect(`https://mr-automative-car-center.netlify.app/dashboard`);
       })
 
         //<-------- SSLCommerz Cancel API------------>
 
       app.post('/cancel', (req,res)=>{
-        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/dashboard/cancel`);
+        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/dashboard`);
       })
         
       } finally {
