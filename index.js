@@ -250,13 +250,13 @@ app.use(express.urlencoded({ extended: true }));
          //<-------- SSLCommerz Fail API------------>
 
       app.post('/fail', (req,res)=>{
-        res.status(400).json(req.body);
+        res.status(400).redirect(`http://localhost:3000/dashboard/myOrders`);
       })
 
         //<-------- SSLCommerz Cancel API------------>
 
       app.post('/cancel', (req,res)=>{
-        res.status(200).json(req.body);
+        res.status(200).redirect(`http://localhost:3000/dashboard/myOrders`);
       })
         
       } finally {
