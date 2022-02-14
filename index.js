@@ -226,7 +226,7 @@ app.use(express.urlencoded({ extended: true }));
               value_c: 'ref003_C',
               value_d: 'ref004_D'
           };
-          const sslcommer = new SSLCommerzPayment(process.env.STORE_ID,process.env.STORE_PASSWORD,false)
+          const sslcommer = new SSLCommerzPayment(process.env.STORE_ID,process.env.STORE_PASSWORD,true)
           sslcommer.init(productInfo).then(data => {
             const info = { ...productInfo, ...data }
             console.log(info);
