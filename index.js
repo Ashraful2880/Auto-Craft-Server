@@ -226,7 +226,7 @@ app.use(express.urlencoded({ extended: true }));
               value_c: 'ref003_C',
               value_d: 'ref004_D'
           };
-          const sslcommer = new SSLCommerzPayment(process.env.STORE_ID,process.env.STORE_PASSWORD,true)
+          const sslcommer = new SSLCommerzPayment(process.env.STORE_ID,process.env.STORE_PASSWORD,false)
           sslcommer.init(productInfo).then(data => {
             const info = { ...productInfo, ...data }
             console.log(info);
@@ -250,13 +250,13 @@ app.use(express.urlencoded({ extended: true }));
          //<-------- SSLCommerz Fail API------------>
 
       app.post('/fail', (req,res)=>{
-        res.status(400).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/myOrders`);
+        res.status(400).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/fail`);
       })
 
         //<-------- SSLCommerz Cancel API------------>
 
       app.post('/cancel', (req,res)=>{
-        res.status(200).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/myOrders`);
+        res.status(200).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/cancel`);
       })
         
       } finally {
