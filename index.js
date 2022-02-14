@@ -193,10 +193,10 @@ app.use(express.urlencoded({ extended: true }));
               total_amount: req.body.total_amount,
               currency: 'BDT',
               tran_id: uuidv4(),
-              success_url: 'https://serene-coast-79100.herokuapp.com/success',
-              fail_url: 'https://serene-coast-79100.herokuapp.com/failure',
-              cancel_url: 'https://serene-coast-79100.herokuapp.com/cancel',
-              ipn_url: 'https://serene-coast-79100.herokuapp.com/ipn',
+              success_url: 'https://mr-automative-car-center.netlify.app/success',
+              fail_url: 'https://mr-automative-car-center.netlify.app/failure',
+              cancel_url: 'https://mr-automative-car-center.netlify.app/cancel',
+              ipn_url: 'https://mr-automative-car-center.netlify.app/ipn',
               paymentStatus: 'pending',
               shipping_method: 'Courier',
               product_name: req.body.product_name,
@@ -244,19 +244,19 @@ app.use(express.urlencoded({ extended: true }));
           //<-------- SSLCommerz Success API------------>
 
       app.post('/success', (req,res)=>{
-        res.status(200).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/success`);
+        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/dashboard/success`);
       })
 
          //<-------- SSLCommerz Fail API------------>
 
       app.post('/fail', (req,res)=>{
-        res.status(400).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/fail`);
+        res.status(400).redirect(`https://mr-automative-car-center.netlify.app/dashboard/fail`);
       })
 
         //<-------- SSLCommerz Cancel API------------>
 
       app.post('/cancel', (req,res)=>{
-        res.status(200).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/cancel`);
+        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/dashboard/cancel`);
       })
         
       } finally {
