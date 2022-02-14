@@ -194,8 +194,8 @@ app.use(express.urlencoded({ extended: true }));
               currency: 'BDT',
               tran_id: uuidv4(),
               success_url: 'https://mr-automative-car-center.netlify.app/success',
-              fail_url: 'https://mr-automative-car-center.netlify.app/failure',
-              cancel_url: 'https://mr-automative-car-center.netlify.app/cancel',
+              fail_url: 'https://mr-automative-car-center.netlify.app/home',
+              cancel_url: 'https://mr-automative-car-center.netlify.app/home',
               ipn_url: 'https://mr-automative-car-center.netlify.app/ipn',
               paymentStatus: 'pending',
               shipping_method: 'Courier',
@@ -250,13 +250,13 @@ app.use(express.urlencoded({ extended: true }));
          //<-------- SSLCommerz Fail API------------>
 
       app.post('/fail', (req,res)=>{
-        res.status(400).redirect(`https://mr-automative-car-center.netlify.app/`);
+        res.status(400).redirect(`https://mr-automative-car-center.netlify.app/home`);
       })
 
         //<-------- SSLCommerz Cancel API------------>
 
       app.post('/cancel', (req,res)=>{
-        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/`);
+        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/home`);
       })
         
       } finally {
