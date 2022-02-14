@@ -193,10 +193,10 @@ app.use(express.urlencoded({ extended: true }));
               total_amount: req.body.total_amount,
               currency: 'BDT',
               tran_id: uuidv4(),
-              success_url: 'http://localhost:5000/success',
-              fail_url: 'http://localhost:5000/failure',
-              cancel_url: 'http://localhost:5000/cancel',
-              ipn_url: 'http://localhost:5000/ipn',
+              success_url: 'https://serene-coast-79100.herokuapp.com/success',
+              fail_url: 'https://serene-coast-79100.herokuapp.com/failure',
+              cancel_url: 'https://serene-coast-79100.herokuapp.com/cancel',
+              ipn_url: 'https://serene-coast-79100.herokuapp.com/ipn',
               paymentStatus: 'pending',
               shipping_method: 'Courier',
               product_name: req.body.product_name,
@@ -244,19 +244,19 @@ app.use(express.urlencoded({ extended: true }));
           //<-------- SSLCommerz Success API------------>
 
       app.post('/success', (req,res)=>{
-        res.status(200).redirect(`http://localhost:3000/dashboard/success`);
+        res.status(200).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/success`);
       })
 
          //<-------- SSLCommerz Fail API------------>
 
       app.post('/fail', (req,res)=>{
-        res.status(400).redirect(`http://localhost:3000/dashboard/myOrders`);
+        res.status(400).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/myOrders`);
       })
 
         //<-------- SSLCommerz Cancel API------------>
 
       app.post('/cancel', (req,res)=>{
-        res.status(200).redirect(`http://localhost:3000/dashboard/myOrders`);
+        res.status(200).redirect(`https://serene-coast-79100.herokuapp.com/dashboard/myOrders`);
       })
         
       } finally {
