@@ -244,19 +244,19 @@ app.use(express.urlencoded({ extended: true }));
           //<-------- SSLCommerz Success API------------>
 
       app.post('/success', (req,res)=>{
-        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/dashboard/success`);
+        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/success`);
       })
 
          //<-------- SSLCommerz Fail API------------>
 
       app.post('/fail', (req,res)=>{
-        res.status(400).redirect(`https://mr-automative-car-center.netlify.app/dashboard`);
+        res.status(400).redirect(`https://mr-automative-car-center.netlify.app/`);
       })
 
         //<-------- SSLCommerz Cancel API------------>
 
       app.post('/cancel', (req,res)=>{
-        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/dashboard`);
+        res.status(200).redirect(`https://mr-automative-car-center.netlify.app/`);
       })
         
       } finally {
