@@ -2,6 +2,7 @@ const express=require('express');
 const { MongoClient } = require('mongodb');
 const ObjectId=require('mongodb').ObjectId;
 require('dotenv').config();
+const { v4: uuidv4 } = require('uuid');
 const app=express();
 const port=process.env.PORT || 5000;
 const cors=require('cors');
@@ -163,7 +164,6 @@ app.use(express.urlencoded({ extended: true }));
           const id=req.params.id;
           const query={_id:ObjectId(id)}
           const remove=await OrderCollections.deleteOne(query);
-          console.log(remove);
           res.json(remove)
         });
 
@@ -182,27 +182,29 @@ app.use(express.urlencoded({ extended: true }));
           const id=req.params.id;
           const query={_id:ObjectId(id)}
           const remove=await carCollections.deleteOne(query);
-          console.log(remove);
           res.json(remove)
         });
 
         //<----------- SSL Commerz API----------->
 
-        app.get('/init/:amount', (req, res) => {
-          const data = {
-              total_amount: req.params.amount,
+        app.post('/init', async (req, res) => {
+          console.log("hitting")
+          const productInfo = {
+              total_amount: req.body.total_amount,
               currency: 'BDT',
-              tran_id: 'REF123',
+              tran_id: uuidv4(),
               success_url: 'http://localhost:5000/success',
-              fail_url: 'http://localhost:5000/fail',
+              fail_url: 'http://localhost:5000/failure',
               cancel_url: 'http://localhost:5000/cancel',
               ipn_url: 'http://localhost:5000/ipn',
+              paymentStatus: 'pending',
               shipping_method: 'Courier',
-              product_name: 'Computer.',
+              product_name: req.body.product_name,
               product_category: 'Electronic',
-              product_profile: 'general',
-              cus_name: 'Customer Name',
-              cus_email: 'cust@yahoo.com',
+              product_profile: req.body.product_profile,
+              product_image: req.body.product_image,
+              cus_name: req.body.cus_name,
+              cus_email: req.body.cus_email,
               cus_add1: 'Dhaka',
               cus_add2: 'Dhaka',
               cus_city: 'Dhaka',
@@ -211,7 +213,7 @@ app.use(express.urlencoded({ extended: true }));
               cus_country: 'Bangladesh',
               cus_phone: '01711111111',
               cus_fax: '01711111111',
-              ship_name: 'Customer Name',
+              ship_name: req.body.cus_name,
               ship_add1: 'Dhaka',
               ship_add2: 'Dhaka',
               ship_city: 'Dhaka',
@@ -225,29 +227,35 @@ app.use(express.urlencoded({ extended: true }));
               value_d: 'ref004_D'
           };
           const sslcommer = new SSLCommerzPayment(process.env.STORE_ID,process.env.STORE_PASSWORD,false)
-            sslcommer.init(data).then(data => {
-            res.redirect(data.GatewayPageURL)
-          });
-      })
+          sslcommer.init(productInfo).then(data => {
+            const info = { ...productInfo, ...data }
+            console.log(info);
+            if (info.GatewayPageURL) {
+                res.json(info.GatewayPageURL)
+            }
+            else {
+                return res.status(400).json({
+                    message: "Payment Session Was Not Successful"
+                })
+            }
+        });
+      });
 
           //<-------- SSLCommerz Success API------------>
 
       app.post('/success', (req,res)=>{
-        console.log(req.body);
-        res.status(200).json(req.body);
+        res.status(200).redirect(`http://localhost:3000/dashboard/success`);
       })
-      
+
          //<-------- SSLCommerz Fail API------------>
 
       app.post('/fail', (req,res)=>{
-        console.log(req.body);
         res.status(400).json(req.body);
       })
 
         //<-------- SSLCommerz Cancel API------------>
 
       app.post('/cancel', (req,res)=>{
-        console.log(req.body);
         res.status(200).json(req.body);
       })
         
