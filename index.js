@@ -74,7 +74,6 @@ async function run() {
     //<--------------- Make an Order Order ----------------->
     app.post("/makeOrder", async (req, res) => {
       const newOrder = req.body;
-      console.log("ORDER", newOrder);
       const result = await OrderCollections.insertOne(newOrder);
       res.json(result);
     });
@@ -167,7 +166,6 @@ async function run() {
     });
 
     //<------------ Update a Product ------------>
-
     app.put("/updateProduct/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -181,6 +179,17 @@ async function run() {
         },
         { upsert: true }
       );
+      res.json(result);
+    });
+
+    // Update Product Status
+    app.put("/status/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { id: id };
+      const updateStatus = { $set: { status: "Approve" } };
+      const result = await OrderCollections.updateOne(filter, updateStatus, {
+        upsert: true,
+      });
       res.json(result);
     });
 
@@ -233,7 +242,6 @@ async function run() {
     //<----------- SSL Commerz API----------->
 
     app.post("/init", async (req, res) => {
-      console.log("hitting");
       const productInfo = {
         total_amount: req.body.total_amount,
         currency: "BDT",
@@ -278,7 +286,6 @@ async function run() {
       );
       sslcommer.init(productInfo).then((data) => {
         const info = { ...productInfo, ...data };
-        console.log(info);
         if (info.GatewayPageURL) {
           res.json(info.GatewayPageURL);
         } else {
