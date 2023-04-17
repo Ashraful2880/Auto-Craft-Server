@@ -14,8 +14,7 @@ app.use(express.json());
 app.use(fileUpload());
 app.use(express.urlencoded({ extended: true }));
 
-//<------------- Database Code Here ---------->
-
+// Database Code Here
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pxp8q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
@@ -27,7 +26,7 @@ async function run() {
   try {
     await client.connect();
 
-    //<------------ Database All Collections ------------->
+    // Database All Collections
     const database = client.db("carCollections");
     const carCollections = database.collection("allCars");
     const blogCollections = database.collection("blogs");
@@ -35,13 +34,13 @@ async function run() {
     const userCollections = database.collection("users");
     const OrderCollections = database.collection("allOrders");
 
-    //<------------ Get All Cars  ------------->
-
+    // Get All Cars
     app.get("/allCars", async (req, res) => {
       const getCars = await carCollections.find({}).toArray();
       res.send(getCars);
     });
 
+    // Get Cars With Pagination
     app.get("/cars", async (req, res) => {
       const limit = 6;
       const page = parseInt(req.query.page) || 1;
@@ -63,7 +62,6 @@ async function run() {
     });
 
     // Get A Single Car Details
-
     app.get("/car/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -71,26 +69,26 @@ async function run() {
       res.json(showOrder);
     });
 
-    //<--------------- Make an Order Order ----------------->
+    // Make an Order Order
     app.post("/makeOrder", async (req, res) => {
       const newOrder = req.body;
       const result = await OrderCollections.insertOne(newOrder);
       res.json(result);
     });
 
-    //<--------------- Get All Testimonial ----------------->
+    // Get All Testimonial
     app.get("/testimonials", async (req, res) => {
       const getUserRatings = await ratingCollections.find({}).toArray();
       res.send(getUserRatings);
     });
 
-    //<------------ Get All Blogs ------------->
+    // Get All Blogs
     app.get("/blogs", async (req, res) => {
       const getBlogs = await blogCollections.find({}).toArray();
       res.send(getBlogs);
     });
 
-    //<------------ Get Single Blog By ID ------------->
+    // Get Single Blog By ID
     app.get("/blog/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -100,7 +98,13 @@ async function run() {
 
     // Dashboard All Route Here
 
-    //<----------- Get Specific User Orders By Email ------------>
+    // Get All Orders
+    app.get("/orders", async (req, res) => {
+      const allOrders = await OrderCollections.find({}).toArray();
+      res.json(allOrders);
+    });
+
+    // Get Specific User Orders By Email
     app.get("/myOrders/:email", async (req, res) => {
       const userEmail = req.params.email;
       const cursor = OrderCollections.find({ email: userEmail });
@@ -108,26 +112,13 @@ async function run() {
       res.json(myOrder);
     });
 
-    //<----------- View Single Order Details ------------>
-    app.get("/order/:id", async (req, res) => {
+    // View Single Order Details
+    /*   app.get("/order/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const singleOrder = await OrderCollections.findOne(query);
       res.json(singleOrder);
-    });
-
-    // Get All Orders
-    app.get("/orders", async (req, res) => {
-      const allOrders = await OrderCollections.find({}).toArray();
-      res.json(allOrders);
-    });
-
-    //<------------ Post A Rating By User ------------->
-    app.post("/addRating", async (req, res) => {
-      const newRating = req.body;
-      const result = await ratingCollections.insertOne(newRating);
-      res.json(result);
-    });
+    }); */
 
     // Find All Order Information For Specific User
     app.post("/findOrder", async (req, res) => {
@@ -139,7 +130,7 @@ async function run() {
       res.json(orderInformation);
     });
 
-    //<-------- Delete an Order --------->
+    // Delete an Order
 
     app.delete("/deleteOrder/:id", async (req, res) => {
       const id = req.params.id;
@@ -148,7 +139,7 @@ async function run() {
       res.json(remove);
     });
 
-    //<------------Add New Product ------------>
+    // Add New Product
 
     app.post("/addProduct", async (req, res) => {
       const addProduct = req.body;
@@ -156,8 +147,7 @@ async function run() {
       res.json(result);
     });
 
-    //<------------ Delete a Product ------------>
-
+    // Delete a Product
     app.delete("/deleteProduct/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -165,7 +155,7 @@ async function run() {
       res.json(remove);
     });
 
-    //<------------ Update a Product ------------>
+    // Update a Product
     app.put("/updateProduct/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -193,16 +183,21 @@ async function run() {
       res.json(result);
     });
 
-    //<--------------- Save register User info----------------->
+    // Post A Rating By User
+    app.post("/addRating", async (req, res) => {
+      const newRating = req.body;
+      const result = await ratingCollections.insertOne(newRating);
+      res.json(result);
+    });
 
+    // Save register User info
     app.post("/users", async (req, res) => {
       const newUsers = req.body;
       const result = await userCollections.insertOne(newUsers);
       res.json(result);
     });
 
-    //<--------------- Update Google Signin User info ----------------->
-
+    // Update Google Signin User info
     app.put("/users", async (req, res) => {
       const newUser = req.body;
       const filter = { email: newUser.email };
@@ -216,8 +211,7 @@ async function run() {
       res.json(result);
     });
 
-    //<--------------- Update Admin Role ----------------->
-
+    // Update Admin Role
     app.put("/users/admin", async (req, res) => {
       const user = req.body;
       const filter = { email: user.email };
@@ -226,8 +220,7 @@ async function run() {
       res.json(result);
     });
 
-    //<------------ Get Admin Data By Email  ------------->
-
+    // Get Admin Data By Email
     app.get("/user/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
@@ -239,9 +232,8 @@ async function run() {
       res.json({ admin: isAdmin });
     });
 
-    //<----------- SSL Commerz API----------->
-
-    app.post("/init", async (req, res) => {
+    // SSL Commerz API
+    /*   app.post("/init", async (req, res) => {
       const productInfo = {
         total_amount: req.body.total_amount,
         currency: "BDT",
@@ -294,31 +286,31 @@ async function run() {
           });
         }
       });
-    });
+    }); */
 
-    //<-------- SSLCommerz Success API------------>
+    // SSLCommerz Success API
 
-    app.post("/success", (req, res) => {
+    /*  app.post("/success", (req, res) => {
       res
         .status(200)
         .redirect(`https://mr-automative-car-center.netlify.app/success`);
-    });
+    }); */
 
-    //<-------- SSLCommerz Fail API------------>
+    // SSLCommerz Fail API
 
-    app.post("/fail", (req, res) => {
+    /*    app.post("/fail", (req, res) => {
       res
         .status(400)
         .redirect(`https://mr-automative-car-center.netlify.app/home`);
-    });
+    }); */
 
-    //<-------- SSLCommerz Cancel API------------>
+    // SSLCommerz Cancel API
 
-    app.post("/cancel", (req, res) => {
+    /*   app.post("/cancel", (req, res) => {
       res
         .status(200)
         .redirect(`https://mr-automative-car-center.netlify.app/home`);
-    });
+    }); */
   } finally {
     // await client.close();
   }
@@ -326,9 +318,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Running Mr.Automotive Server");
+  res.send("Running Auto Craft");
 });
 
 app.listen(port, () => {
-  console.log("Running Server Port is", port);
+  console.log("Running Auto Craft", port);
 });
