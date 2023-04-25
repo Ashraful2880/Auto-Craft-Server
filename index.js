@@ -33,6 +33,7 @@ async function run() {
     const ratingCollections = database.collection("userRatings");
     const userCollections = database.collection("users");
     const OrderCollections = database.collection("allOrders");
+    const branchCollection = database.collection("allDealers");
 
     // Get All Cars
     app.get("/allCars", async (req, res) => {
@@ -76,10 +77,16 @@ async function run() {
       res.json(result);
     });
 
-    // Get All Testimonial
+    // Get All Testimonials
     app.get("/testimonials", async (req, res) => {
       const getUserRatings = await ratingCollections.find({}).toArray();
       res.send(getUserRatings);
+    });
+
+    // Get All Branches
+    app.get("/branches", async (req, res) => {
+      const getBranches = await branchCollection.find({}).toArray();
+      res.send(getBranches);
     });
 
     // Get All Blogs
