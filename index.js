@@ -33,7 +33,8 @@ async function run() {
     const ratingCollections = database.collection("userRatings");
     const userCollections = database.collection("users");
     const OrderCollections = database.collection("allOrders");
-    const branchCollection = database.collection("allDealers");
+    const branchCollection = database.collection("allBranches");
+    const serviceCollection = database.collection("allServiceRequest");
 
     // Get All Cars
     app.get("/allCars", async (req, res) => {
@@ -119,14 +120,6 @@ async function run() {
       res.json(myOrder);
     });
 
-    // View Single Order Details
-    /*   app.get("/order/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: ObjectId(id) };
-      const singleOrder = await OrderCollections.findOne(query);
-      res.json(singleOrder);
-    }); */
-
     // Find All Order Information For Specific User
     app.post("/findOrder", async (req, res) => {
       const bodyData = req.body;
@@ -147,7 +140,6 @@ async function run() {
     });
 
     // Add New Product
-
     app.post("/addProduct", async (req, res) => {
       const addProduct = req.body;
       const result = await carCollections.insertOne(addProduct);
@@ -188,6 +180,19 @@ async function run() {
         upsert: true,
       });
       res.json(result);
+    });
+
+    // Post Service Request
+    app.post("/service", async (req, res) => {
+      const addService = req.body;
+      const result = await serviceCollection.insertOne(addService);
+      res.json(result);
+    });
+
+    // Get All Service Request
+    app.get("/service", async (req, res) => {
+      const allService = await serviceCollection.find({}).toArray();
+      res.json(allService);
     });
 
     // Post A Rating By User
