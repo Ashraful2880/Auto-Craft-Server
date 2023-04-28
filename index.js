@@ -236,12 +236,12 @@ async function run() {
     app.get("/user/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
-      const getAdmin = await userCollections.findOne(query);
-      let isAdmin = false;
+      const getUser = await userCollections.findOne(query);
+      /* let isAdmin = false;
       if (getAdmin?.role === "admin") {
         isAdmin = true;
-      }
-      res.json({ admin: isAdmin });
+      } */
+      res.json(getUser);
     });
 
     // SSL Commerz API
