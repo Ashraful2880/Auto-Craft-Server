@@ -227,7 +227,7 @@ async function run() {
     app.put("/users/admin", async (req, res) => {
       const user = req.body;
       const filter = { email: user.email };
-      const updateAdmin = { $set: { role: "Admin" } };
+      const updateAdmin = { $set: { role: "admin" } };
       const result = await userCollections.updateOne(filter, updateAdmin);
       res.json(result);
     });
@@ -236,12 +236,12 @@ async function run() {
     app.get("/user/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
-      const getUser = await userCollections.findOne(query);
-      /* let isAdmin = false;
+      const getAdmin = await userCollections.findOne(query);
+      let isAdmin = false;
       if (getAdmin?.role === "admin") {
         isAdmin = true;
-      } */
-      res.json(getUser);
+      }
+      res.json({ admin: isAdmin });
     });
 
     // SSL Commerz API
