@@ -223,6 +223,12 @@ async function run() {
       res.json(result);
     });
 
+    // Get User Data
+    app.get("/users", async (req, res) => {
+      const getUser = await userCollections.find({}).toArray();
+      res.json(getUser);
+    });
+
     // Update Admin Role
     app.put("/users/admin", async (req, res) => {
       const user = req.body;
